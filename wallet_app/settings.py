@@ -43,9 +43,8 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-LOCAL_APPS = ['cards',
-              'dashboard',
-              'api',
+LOCAL_APPS = ['api',
+              'wallet'
               ]
 
 THIRD_PARTY = ['rest_framework',
