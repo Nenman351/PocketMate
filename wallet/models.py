@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 
-class Cards(models.Model):
+class Card(models.Model):
     card_name = models.CharField(max_length=255, blank=False, null=False)
     card_number = models.IntegerField()
     expiry_date = models.DateField()
