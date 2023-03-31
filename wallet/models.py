@@ -28,4 +28,4 @@ class User(AbstractUser):
 
 class wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    card = models.ForeignKey(Cards, on_delete=models.CASCADE, related_name='card')
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='card')
