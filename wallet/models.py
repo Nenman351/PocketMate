@@ -8,9 +8,9 @@ from django.db import models
 
 class Card(models.Model):
     card_name = models.CharField(max_length=255, blank=False, null=False)
-    card_number = models.IntegerField()
-    expiry_date = models.DateField()
-    cvv = models.IntegerField()
+    card_number = models.IntegerField(blank=False, null=False)
+    expiry_date = models.DateField(blank=False, null=False)
+    cvv = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
         return self.card_name
@@ -21,7 +21,7 @@ class Next_Of_Kin(models.Model):
     email = models.EmailField(blank=True, null=False)
     phone_number = models.IntegerField(blank=False, null=False)
     relationship = models.CharField(max_length=255, blank=False, null=False)
-    bvn = models.IntegerField()
+    bvn = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
         return self.full_name
@@ -48,13 +48,11 @@ class Status(Enum):
 
 class Transaction(models.Model):
     TRANSACTION_TYPES = (
-        ('Deposit', 'D'),
-        ('Withdrawal', 'W'),
-        ('Transfer', 'T'),
+        ('Deposit', 'deposit'),
+        ('Withdrawal', 'withdrawal'),
+        ('Transfer', 'transfer'),
     )
     STATUS_CHOICES = [(status.name, status.value) for status in Status]
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_transactions')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=45, choices=STATUS_CHOICES, default='success')
