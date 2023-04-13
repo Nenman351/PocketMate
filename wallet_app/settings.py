@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 import environ
@@ -20,7 +20,6 @@ environ.Env().read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -48,11 +46,14 @@ LOCAL_APPS = ['api',
               ]
 
 THIRD_PARTY = ['rest_framework',
+               "debug_toolbar",
+               'djoser',
                ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wallet_app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -95,7 +95,6 @@ DATABASES = {
         'HOST': env('DB_HOST'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -115,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -127,7 +125,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -137,3 +134,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'wallet.User'
+
+MEDIA_ROOT = 'media'
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.UserCreate',
+    }
+}
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
+}
